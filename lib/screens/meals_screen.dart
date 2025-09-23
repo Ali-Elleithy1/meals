@@ -6,12 +6,14 @@ import 'package:meals/widgets/meal_item.dart';
 class MealsScreen extends StatelessWidget {
   const MealsScreen({
     super.key,
-    required this.categoryTitle,
+    this.categoryTitle,
     required this.meals,
+    required this.onToggleFavorite,
   });
 
-  final String categoryTitle;
+  final String? categoryTitle;
   final List<Meal> meals;
+  final void Function(Meal meal) onToggleFavorite;
 
   @override
   Widget build(context) {
@@ -39,11 +41,17 @@ class MealsScreen extends StatelessWidget {
     if (meals.isNotEmpty) {
       content = ListView.builder(
         itemCount: meals.length,
-        itemBuilder: (ctx, index) => MealItem(meal: meals[index]),
+        itemBuilder: (ctx, index) =>
+            MealItem(meal: meals[index], onToggleFavorite: onToggleFavorite),
       );
     }
+
+    if (categoryTitle == null) {
+      return content;
+    }
+
     return Scaffold(
-      appBar: AppBar(title: Text(categoryTitle)),
+      appBar: AppBar(title: Text(categoryTitle!)),
       body: content,
     );
   }
